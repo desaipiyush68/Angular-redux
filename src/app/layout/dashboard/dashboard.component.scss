@@ -1,0 +1,129 @@
+.dashboard{
+
+
+  @media (min-width: 768px){
+    .col-md-6 {
+      margin-top: 2%;
+  }
+  }
+
+.card{
+  width: 20rem;
+}
+.form-group {
+   margin-bottom: 0px; 
+}
+.input-group{
+  padding: 10px;
+}
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  color: lightgray;
+  border-width: 1px 0;
+  margin: 0px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.todo{
+  margin-left: 2%;
+  margin-top: 2%;
+  .lb-todo{
+    margin-left: 2%;
+  }
+  .task-list{
+    margin-left: 2%;
+    float: right;
+  }
+  .updateTask{
+    margin-left: 4%;
+
+  
+  }
+  .deleteTask{
+    margin-left: 4%;
+    margin-right: 2%;
+
+  }
+}
+.done{
+  margin-left: 2%;
+  margin-top: 2%;
+  .lb-done{
+     margin-left: 10px;
+    }
+}
+
+.crt-project{
+
+  background-color: lightgray;
+  text-align: center;
+  .lb-crt-project{
+    margin-top: 10%;
+  }
+}
+
+.btn-add-project{
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 10%;
+}
+.input-add-project{
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 5px;
+
+}
+
+.add-task-header{
+  float: right;
+}
+
+.createTask{
+  color: blue;
+  font-size:x-large;
+  padding-left: 10px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 1s;
+}
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+  
+}

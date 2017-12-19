@@ -1,0 +1,26 @@
+<div class="login-page" [@routerTransition]>
+    <div class="row">
+        <div class="col-md-4 push-md-4">
+            <img src="assets/images/logo.png" width="150px" class="user-avatar" />
+            <h1>Welcome to Blue-Ocean Healthcare</h1>
+            <form role="form">
+                <div class="form-content">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" class="form-control input-underline input-lg"  placeholder="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" class="form-control input-underline input-lg" id="" placeholder="Password">
+                    </div>
+                    <div class="form-group" *ngIf="error"  id="error">
+                            <label for="erroe">Wrong User or Password</label>
+                    </div>
+                </div>
+                <a class="btn rounded-btn"  (click)="onLoggedin()"> Log in </a>
+                &nbsp;
+                <a class="btn rounded-btn" [routerLink]="['/signup']">Register</a>
+            </form>
+        </div>
+        
+    </div>
+</div>
