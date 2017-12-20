@@ -37,8 +37,9 @@ export class SignupComponent implements OnInit {
         const val = this.form.value;
         this.store.dispatch(new usersActions.Signup(val));
         this.user$.subscribe(data =>{
-            let token = data.token;
-            localStorage.setItem('token', token);        
+             if(data.success){
+                       this.router.navigate(['/login']);
+                   }     
          });
     }
 
