@@ -21,4 +21,4 @@ npm start
 
 Navigate to [http://localhost:4202/](http://localhost:4202/) in your browser
 
-Note: bootstrap peer dependecies mismatch error solution  run `npm install --save @ng-bootstrap/ng-bootstrap@1.0.0-beta.4`
+
