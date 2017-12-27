@@ -55,45 +55,4 @@ export class UserService {
     let response = this.http.get(url, options).map(res => res.json());
     return response;
   }
-
-
 }
-
-
-
-
-       //  var headers = new Headers();
-       //  headers.append('Content-Type', 'application/json');
-      //  headers.append('Access-Control-Allow-Origin', '*');
-      //  const httpOptions = {
-      //   headers: new HttpHeaders(
-      //   [{ 'Content-Type': 'application/json'}])
-      // };
-
-      //    var headers = new Headers();
-      //        headers.append('Content-Type','application/json');
-      //        headers.append('Accept', 'application/json');
-      //        headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT');
-      //        headers.append('Access-Control-Allow-Origin', '*');
-      //        headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
-      // //  console.log(header);
-      //  let options = new RequestOptions({ headers: header });
-      // let credential = { email:Email,password:Password };
-      // let body = JSON.stringify(credential);
-      // const options = new RequestOptions({
-      //   method: RequestMethod.Post,
-      //   url: 'http://localhost:8000/api/authenticate',
-      //   headers:headers,
-      //   body:body,
-      //   responseType:ResponseContentType.Json,
-      //   withCredentials:true
-      // });
-      // const req = new Request(options);
-      // console.log(req);
-      //let test = credential.toString();
-      //console.log(credential);
-      //  let body = credential.toString();
-      //  console.log(email);
-      // console.log(password);
-      //   post   url,body,options,requestOptions
-      // return  this.http.post('http://localhost:8000/api/authenticate',body,httpOptions).map(res=>res,JSON);
