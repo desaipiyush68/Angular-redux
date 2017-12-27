@@ -52,11 +52,4 @@ export class TaskService {
         return response;
     }
 
-    // deleteProject() {
-    //     //Delete project
-    // }
-
-
-
-
 }
