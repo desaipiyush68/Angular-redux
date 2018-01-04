@@ -23,14 +23,14 @@ export class ProjectEffects {
     .map((action: projectActions.CreateProject) => action.payload)
     .switchMap(payload => this.projectService.createProject(payload.name)
       .map(res => {
-        return new projectActions.CreateProjectSuccess(res);
+        return new projectActions.GetProjectList(res);
       }));
 
 
   @Effect()
   getProjectList: Observable<Action> = this.actions.ofType(projectActions.GET_PROJECT_LIST)
     .map((action: projectActions.GetProjectList) => action.payload)
-    .mergeMap(payload => this.projectService.getProjects())
+    .switchMap(payload => this.projectService.getProjects())
     .map(payload => {
       return new projectActions.GetProjectListSuccess(payload);
     });
@@ -48,7 +48,7 @@ export class ProjectEffects {
       .map((action: projectActions.DeleteProject) => action.payload)
       .switchMap(payload => this.projectService.deleteProject(payload)
       .map(res => {
-          return new projectActions.DeleteProjectSuccess(res);
+          return new projectActions.GetProjectList(res);
         }));
 
 }
