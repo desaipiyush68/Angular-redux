@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit {
         this.upTask = false;
         this.dltTask = false;
         this.dltProject = false;
+        this.refreshProject();
         
     }
 
