@@ -9,7 +9,10 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 
 import * as taskActions from '../actions/task.actions';
-export type Action = taskActions.All;
+export type Actiontask = taskActions.All;
+
+import * as projectActions from '../actions/project.actions';
+export type Actionproject = projectActions.All;
 
 
 
@@ -20,24 +23,24 @@ export class TaskEffects {
 
 
   @Effect()
-  createTask: Observable<Action> = this.actions.ofType(taskActions.CREAT_TASK)
+  createTask: Observable<Actionproject> = this.actions.ofType(taskActions.CREAT_TASK)
     .map((action: taskActions.CreateTask) => action.payload)
     .switchMap(payload => this.taskService.createTask(payload.name, payload.description, payload.pid)
     .map(res => {
-        return new taskActions.CreateTaskSuccess(res);
+        return new projectActions.GetProjectList();
       }));
 
 
   @Effect()
-  getTaskList: Observable<Action> = this.actions.ofType(taskActions.GET_TASK_LIST)
+  getTaskList: Observable<Actiontask> = this.actions.ofType(taskActions.GET_TASK_LIST)
     .map((action: taskActions.GetTaskList) => action.payload)
-    .mergeMap(payload => this.taskService.getTasks(payload.pid))
+    .switchMap(payload => this.taskService.getTasks(payload.pid))
     .map(payload => {
       return new taskActions.GetTaskListSuccess(payload);
     });
 
   @Effect()
-  updateTask: Observable<Action> = this.actions.ofType(taskActions.UPDATE_TASK)
+  updateTask: Observable<Actiontask> = this.actions.ofType(taskActions.UPDATE_TASK)
     .map((action: taskActions.UpdateTask) => action.payload )
     .switchMap(payload => this.taskService.updateTask(payload)
     .map(res => {
@@ -45,11 +48,11 @@ export class TaskEffects {
       }));
 
   @Effect()
-  deleteTask: Observable<Action> = this.actions.ofType(taskActions.DELETE_TASK)
+  deleteTask: Observable<Actionproject> = this.actions.ofType(taskActions.DELETE_TASK)
     .map((action: taskActions.DeleteTask) => action.payload)
     .switchMap(payload => this.taskService.deleteTask(payload)
     .map(res => {
-        return new taskActions.DeleteTaskSuccess(res);
+        return new projectActions.GetProjectList(res);
       }));
 
 
