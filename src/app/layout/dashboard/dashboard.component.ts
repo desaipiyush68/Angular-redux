@@ -48,14 +48,11 @@ export class DashboardComponent implements OnInit {
         this.upTask = false;
         this.dltTask = false;
         this.dltProject = false;
-        //this.refreshProject();
+        
     }
 
     ngOnInit() {
-        this.refreshProject();
-        setInterval(() => {
-            this.refreshProject();
-        }, 5000);
+       
 
     }
 
