@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
-
+import { Subject } from 'rxjs';
 
 @NgModule({})
 export class UserService {
@@ -12,16 +12,18 @@ export class UserService {
   constructor(
     public http: Http,
     private router: Router) {
-    this.headers = new Headers();
-    this.headers.append('Content-Type', 'application/json');
-    this.headers.append('Accept', 'application/json;');
-    this.headers.append('Access-Control-Allow-Origin', '*');
-    this.headers.append('Access-Control-Allow-Credentials', 'true');
+
   }
 
   registration(name: string, email: string, password: string): Observable<any> {
     let url = 'http://localhost:3500/v1/user/auth/register';
-    let options = new RequestOptions({ headers: this.headers });
+           let token = localStorage.getItem('token');
+        let headers = new Headers({ 'Authorization': token });
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json;');
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        let options = new RequestOptions({ headers: headers });
     let body = JSON.stringify({ name: name, email: email, password: password });
     let response = this.http.post(url, body, options).map(res => res.json());
     return response;
@@ -29,19 +31,26 @@ export class UserService {
 
   login(Email: any, Password?: any): Observable<any> {
     let url = 'http://localhost:3500/v1/user/auth/login';
-    let options = new RequestOptions({ headers: this.headers });
-    let body = JSON.stringify({ email: Email, password: Password });
-    let response = this.http.post(url, body, options).map(res => res.json());
+        let token = localStorage.getItem('token');
+        let headers = new Headers({ 'Authorization': token });
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json;');
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        let options = new RequestOptions({ headers: headers });
+    let body:string = JSON.stringify({ email: Email, password: Password });
+    let response:Observable<any> = this.http.post(url, body, options).map(res => res.json());
+
     return response;
   }
 
   logout() {
-    let logout: Observable<any>;
+
     localStorage.removeItem('token');
     let token = localStorage.getItem('token');
-    console.log(token);
     if(!token){
       this.router.navigate(['/login']);
+      let logout: Observable<any> = new Subject();
       return logout;
     }
 
@@ -55,4 +64,6 @@ export class UserService {
     let response = this.http.get(url, options).map(res => res.json());
     return response;
   }
+
+
 }
