@@ -7,18 +7,18 @@ import { Observable } from 'rxjs/Observable';
 
 @NgModule({})
 export class ProjectService {
-    headers: Headers;
     constructor(public http: Http) {
-        let token = localStorage.getItem('token');
-        this.headers = new Headers({ 'Authorization': token });
-        this.headers.append('Content-Type', 'application/json');
-        this.headers.append('Accept', 'application/json;');
-        this.headers.append('Access-Control-Allow-Origin', '*');
-        this.headers.append('Access-Control-Allow-Credentials', 'true');
       }
 
      createProject(name:string) : Observable<any>{
-        let options = new RequestOptions({ headers: this.headers });
+        let token = localStorage.getItem('token');
+        let headers = new Headers({ 'Authorization': token });
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json;');
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        let options = new RequestOptions({ headers: headers });
+        console.log(options);
         let url = 'http://localhost:3500/v1/user/project/create';
         let slug = name;
         let body = JSON.stringify({ name: name,slug:slug});
@@ -30,6 +30,10 @@ export class ProjectService {
     getProjects() : Observable<any> {
         let token = localStorage.getItem('token');
         let headers = new Headers({ 'Authorization': token });
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json;');
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Credentials', 'true');
         let options = new RequestOptions({ headers: headers });
         let url = 'http://localhost:3500/v1/user/project';
         let response = this.http.get(url, options).map(res => res.json());
@@ -37,7 +41,13 @@ export class ProjectService {
     }
 
     updateProject(project): Observable<any> {
-        let options = new RequestOptions({ headers: this.headers });
+        let token = localStorage.getItem('token');
+        let headers = new Headers({ 'Authorization': token });
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json;');
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        let options = new RequestOptions({ headers: headers });
         let url = 'http://localhost:3500/v1/user/project/update';       
         let body = JSON.stringify({project});
         let response = this.http.put(url,body,options).map(res => res.json());
@@ -45,7 +55,13 @@ export class ProjectService {
      }
 
      deleteProject(project): Observable<any> {
-        let options = new RequestOptions({ headers: this.headers });
+        let token = localStorage.getItem('token');
+        let headers = new Headers({ 'Authorization': token });
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json;');
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Credentials', 'true');
+        let options = new RequestOptions({ headers: headers });
         let url = 'http://localhost:3500/v1/user/project/delete/'+project._id+'';
         let response = this.http.delete(url, options).map(res => res.json());
         return response;
@@ -53,3 +69,4 @@ export class ProjectService {
 
 
 }
+
