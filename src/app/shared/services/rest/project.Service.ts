@@ -18,7 +18,6 @@ export class ProjectService {
         headers.append('Access-Control-Allow-Origin', '*');
         headers.append('Access-Control-Allow-Credentials', 'true');
         let options = new RequestOptions({ headers: headers });
-        console.log(options);
         let url = 'http://localhost:3500/v1/user/project/create';
         let slug = name;
         let body = JSON.stringify({ name: name,slug:slug});
