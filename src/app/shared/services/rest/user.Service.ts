@@ -1,5 +1,4 @@
-
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
@@ -9,34 +8,40 @@ import * as Constants from '../app.constant';
 @NgModule({})
 export class UserService {
 
-  constructor(private http: HttpClient,
+  constructor(private http: Http,
     private router: Router) {
   }
 
   public registration(name: string, email: string, password: string): Observable<any> {
 
     let token = localStorage.getItem('token');
-    let headers = new HttpHeaders({ 'Authorization': token });
-    headers.append('Content-type', 'application/json');
-    const body = Object.assign({ name: name, email: email, password: password });
-    return this.http
-      .post<any>(`${Constants.URL}/auth/register`, body, { headers: headers })
-      .map(res => res);
+    let headers = new Headers({ 'Authorization': token });
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json;');
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Credentials', 'true');
+    let options = new RequestOptions({ headers: headers });
+    let body = JSON.stringify({ name: name, email: email, password: password });
+    return this.http.post(`${Constants.URL}/auth/register`, body, options).map(res => res.json());
+   
+
   }
 
   public login(Email: any, Password?: any): Observable<any> {
-
+ 
     let token = localStorage.getItem('token');
-    let headers = new HttpHeaders({ 'Authorization': token });
-    headers.append('Content-type', 'application/json');
-    const body = Object.assign({ email: Email, password: Password });
+    let headers = new Headers({ 'Authorization': token });
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json;');
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Credentials', 'true');
+    let options = new RequestOptions({ headers: headers });
+    let body: string = JSON.stringify({ email: Email, password: Password });
+    return this.http.post(`${Constants.URL}/auth/login`, body, options).map(res => res.json());
 
-    return this.http
-      .post<any>(`${Constants.URL}/auth/login`, body, { headers: headers })
-      .map(res => res);
   }
 
-  public logout(): Observable<any> {
+  public logout() {
 
     localStorage.removeItem('token');
     let token = localStorage.getItem('token');
@@ -51,10 +56,10 @@ export class UserService {
   public GetProfile(): Observable<any> {
 
     let token = localStorage.getItem('token');
-    let headers = new HttpHeaders({ 'Authorization': token });
-    return this.http
-    .get<any>(`${Constants.URL}/auth/profile`, { headers: headers })
-    .map(res => res);
+    let headers = new Headers({ 'Authorization': token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.get(`${Constants.URL}/auth/profile`, options).map(res => res.json());
+  
   }
 
 

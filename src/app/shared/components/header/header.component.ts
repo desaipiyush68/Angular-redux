@@ -19,20 +19,16 @@ export class HeaderComponent implements OnInit {
 
     pushRightClass: string = 'push-right';
     profile$: any;
-   // user: any ={loading:true};
+
     constructor(private translate: TranslateService,
         public router: Router,
         private store: Store<AppState>) {
-       // this.profile$ = this.store.select('user');
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
                 this.toggleSidebar();
             }
         });
-       // this.store.dispatch(new usersActions.GetProfile());
-        // this.profile$.subscribe(data => {        
-        //     this.user = data;
-        // });
+
     }
 
     ngOnInit() {
