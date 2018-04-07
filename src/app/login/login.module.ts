@@ -10,7 +10,6 @@ export function HttpLoaderFactory(http: Http) {
     // for development
     // return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-4/master/dist/assets/i18n/', '.json');
      return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
-    //return new TranslateHttpLoader(http);
 }
 @NgModule({
     imports: [

@@ -5,8 +5,8 @@
                 <div class="card">
                     <div class="card-header">
                         <label for="project">{{project.name}}
-                                <i class="fa fa-pencil-square-o updateTask" (click)='updateProjectModel(project,projectcontent)' aria-hidden="true"></i>
-                                <i class="fa fa-trash-o deleteTask" (click)='deleteProjectModel(project,deletecontent)' aria-hidden="true"></i>
+                            <i class="fa fa-pencil-square-o updateTask" (click)='updateProjectModel(project,projectcontent)' aria-hidden="true"></i>
+                            <i class="fa fa-trash-o deleteTask" (click)='deleteProjectModel(project,deletecontent)' aria-hidden="true"></i>
                         </label>
                         <label class="add-task-header" for="for-add-task">AddTask
                             <i class="fa fa-plus-circle createTask" (click)="addTaskModel(project._id,content)"></i>
@@ -20,16 +20,13 @@
                                 <span class="task-list">{{ task.name }}</span>
                                 <i class="fa fa-pencil-square-o updateTask" (click)='updateTaskModel(task,project,content)' aria-hidden="true"></i>
                                 <i class="fa fa-trash-o deleteTask" (click)='deleteTaskModel(task,deletecontent)' aria-hidden="true"></i>
-                                
-                                        
-                                
                             </li>
                         </ul>
                     </div>
                     <div class="done">
                         <label class="lb-done" for="done">Done</label>
                         <ul *ngFor="let task of project.tasks" class="list-group list-group-flush">
-                            <li *ngIf="Completed(task.complete)" class="list-group-item">
+                            <li *ngIf="completed(task.complete)" class="list-group-item">
                                 <input type="checkbox" [checked]="true" (change)="taskCompleteChanged(task)" aria-label="Checkbox for following text input"> {{ task.name }}
                             </li>
                         </ul>
@@ -43,6 +40,7 @@
                         <label class="lb-crt-project" for="card-body">
                             <h4>Create New Project</h4>
                         </label>
+
                         <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
                             <div class="form-content">
                                 <div class="form-group">
@@ -55,13 +53,14 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
+        
         <ng-template #content let-c="close" let-d="dismiss">
             <div class="modal-header">
                 <h4 class="modal-title" *ngIf="crTask">CreateTask</h4>
@@ -71,6 +70,7 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="taskForm">
                     <div class="form-content">
                         <div class="form-group">
@@ -81,12 +81,14 @@
                         </div>
                     </div>
                 </form>
+
             </div>
             <div class="modal-footer">
                 <button type="button" *ngIf="crTask" class="btn btn-outline-dark" (click)="addTask()" [disabled]="!isNotempty()" (click)="d('Cross click')">CreateTask</button>
                 <button type="button" *ngIf="upTask" class="btn btn-outline-dark" (click)="updateTask()" [disabled]="!isNotempty()" (click)="d('Cross click')">updateTask</button>
             </div>
         </ng-template>
+
         <ng-template #deletecontent let-c="close" let-d="dismiss">
             <div class="modal-header">
                 <h4 *ngIf="dltTask" class="modal-title">DeleteTask</h4>
@@ -108,25 +110,27 @@
                 </div>
             </div>
         </ng-template>
+
         <ng-template #projectcontent let-c="close" let-d="dismiss">
-                <div class="modal-header">
-                    <h4 class="modal-title" >UpdateProject</h4>
-                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
-                        <div class="form-content">
-                            <div class="form-group">
-                                <input class="form-control input-underline input-lg" name="name" formControlName="name" placeholder="Project Name">
-                            </div>
+            <div class="modal-header">
+                <h4 class="modal-title">UpdateProject</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
+                    <div class="form-content">
+                        <div class="form-group">
+                            <input class="form-control input-underline input-lg" name="name" formControlName="name" placeholder="Project Name">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer"> 
-                    <button type="button"  class="btn btn-outline-dark" (click)="updateProject()" [disabled]="!isNameNotEmpty()" (click)="d('Cross click')">updateProject</button>
-                </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="updateProject()" [disabled]="!isNameNotEmpty()" (click)="d('Cross click')">updateProject</button>
+            </div>
         </ng-template>
+
     </div>
 </div>

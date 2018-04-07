@@ -35,20 +35,20 @@ export class ProjectEffects {
       return new projectActions.GetProjectListSuccess(payload);
     });
 
-    @Effect()
-    UpdateProject: Observable<Action> = this.actions.ofType(projectActions.UPDATE_PROJECT)
-      .map((action: projectActions.UpdateProject) => action.payload )
-      .switchMap(payload => this.projectService.updateProject(payload)
+  @Effect()
+  UpdateProject: Observable<Action> = this.actions.ofType(projectActions.UPDATE_PROJECT)
+    .map((action: projectActions.UpdateProject) => action.payload)
+    .switchMap(payload => this.projectService.updateProject(payload)
       .map(res => {
-          return new projectActions.UpdateProjectSuccess(res);
-        }));
-  
-    @Effect()
-    deleteTask: Observable<Action> = this.actions.ofType(projectActions.DELETE_PROJECT)
-      .map((action: projectActions.DeleteProject) => action.payload)
-      .switchMap(payload => this.projectService.deleteProject(payload)
+        return new projectActions.UpdateProjectSuccess(res);
+      }));
+
+  @Effect()
+  deleteTask: Observable<Action> = this.actions.ofType(projectActions.DELETE_PROJECT)
+    .map((action: projectActions.DeleteProject) => action.payload)
+    .switchMap(payload => this.projectService.deleteProject(payload)
       .map(res => {
-          return new projectActions.GetProjectList(res);
-        }));
+        return new projectActions.GetProjectList(res);
+      }));
 
 }

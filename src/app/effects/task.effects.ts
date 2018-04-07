@@ -26,7 +26,7 @@ export class TaskEffects {
   createTask: Observable<Actionproject> = this.actions.ofType(taskActions.CREAT_TASK)
     .map((action: taskActions.CreateTask) => action.payload)
     .switchMap(payload => this.taskService.createTask(payload.name, payload.description, payload.pid)
-    .map(res => {
+      .map(res => {
         return new projectActions.GetProjectList();
       }));
 
@@ -41,9 +41,9 @@ export class TaskEffects {
 
   @Effect()
   updateTask: Observable<Actiontask> = this.actions.ofType(taskActions.UPDATE_TASK)
-    .map((action: taskActions.UpdateTask) => action.payload )
+    .map((action: taskActions.UpdateTask) => action.payload)
     .switchMap(payload => this.taskService.updateTask(payload)
-    .map(res => {
+      .map(res => {
         return new taskActions.UpdateTaskSuccess(res);
       }));
 
@@ -51,7 +51,7 @@ export class TaskEffects {
   deleteTask: Observable<Actionproject> = this.actions.ofType(taskActions.DELETE_TASK)
     .map((action: taskActions.DeleteTask) => action.payload)
     .switchMap(payload => this.taskService.deleteTask(payload)
-    .map(res => {
+      .map(res => {
         return new projectActions.GetProjectList(res);
       }));
 

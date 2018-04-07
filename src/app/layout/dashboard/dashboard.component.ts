@@ -44,6 +44,7 @@ export class DashboardComponent  {
         private store: Store<AppState>,
         private fb: FormBuilder,
         private modalService: NgbModal) {
+
         this.project$ = this.store.select('project');
         this.task$ = this.store.select('task');
         this.projectForm = this.fb.group({
@@ -77,7 +78,7 @@ export class DashboardComponent  {
     }
 
     addTaskModel(pid, content) {
-        console.log(pid);
+        
         //Initaite form
         this.taskForm = this.fb.group({
             name: ['', Validators.required],
@@ -92,6 +93,7 @@ export class DashboardComponent  {
         });
 
     }
+
     // cerate Task
     addTask() {
         const val = this.taskForm.value;
@@ -121,6 +123,7 @@ export class DashboardComponent  {
         });
 
     }
+
     //Update task
     updateTask() {
         let task = this.currentTask;
@@ -221,7 +224,7 @@ export class DashboardComponent  {
             return false;
         
     }
-    Completed(value) {
+    completed(value) {
         if (value == 1) 
             return true;
         else 
