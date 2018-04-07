@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { error } from 'selenium-webdriver';
 import { AppState } from '../../store/store';
@@ -9,6 +9,8 @@ import { FormGroup, FormBuilder, Validators, NgModel } from "@angular/forms";
 import { BehaviorSubject } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Task } from '../../shared/models/task.model';
+import { Project } from '../../shared/models/project.model';
 
 
 @Component({
@@ -18,14 +20,16 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
     animations: [routerTransition()],
     encapsulation: ViewEncapsulation.None
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent  {
 
     project$: Observable<any>;
-    task$: any;
-    Projects: any[];
-    Tasks: any[];
-    form: FormGroup;
-    taskform: FormGroup;
+    task$: Observable<any>;
+
+    Projects: Array<Project>;
+    Tasks: Array<Task>;
+
+    projectForm: FormGroup;
+    taskForm: FormGroup;
     closeResult: string;
     crTask: boolean;
     upTask: boolean;
@@ -35,13 +39,14 @@ export class DashboardComponent implements OnInit {
     dltTask: boolean;
     dltProject: boolean;
     currentProject: any;
+    
     constructor(
         private store: Store<AppState>,
         private fb: FormBuilder,
         private modalService: NgbModal) {
         this.project$ = this.store.select('project');
         this.task$ = this.store.select('task');
-        this.form = this.fb.group({
+        this.projectForm = this.fb.group({
             name: ['', Validators.required]
         });
         this.crTask = true;
@@ -52,10 +57,7 @@ export class DashboardComponent implements OnInit {
         
     }
 
-    ngOnInit() {
-       
 
-    }
 
     refreshProject(): void {
         this.store.dispatch(new projectActions.GetProjectList());
@@ -67,9 +69,9 @@ export class DashboardComponent implements OnInit {
 
     // create Project
     addProject() {
-        const val = this.form.value;
+        const val = this.projectForm.value;
         this.store.dispatch(new projectActions.CreateProject(val));
-        this.form = this.fb.group({
+        this.projectForm = this.fb.group({
             name: ['', Validators.required]
         });
     }
@@ -77,7 +79,7 @@ export class DashboardComponent implements OnInit {
     addTaskModel(pid, content) {
         console.log(pid);
         //Initaite form
-        this.taskform = this.fb.group({
+        this.taskForm = this.fb.group({
             name: ['', Validators.required],
             description: ['', Validators.required]
         });
@@ -92,11 +94,11 @@ export class DashboardComponent implements OnInit {
     }
     // cerate Task
     addTask() {
-        const val = this.taskform.value;
+        const val = this.taskForm.value;
         let payload = { name: val.name, description: val.description, pid: this.pid };
         this.store.dispatch(new taskActions.CreateTask(payload));
         this.pid = null;
-        this.taskform = this.fb.group({
+        this.taskForm = this.fb.group({
             name: ['', Validators.required],
             description: ['', Validators.required],
             complete: [0]
@@ -107,7 +109,7 @@ export class DashboardComponent implements OnInit {
         this.crTask = false;
         this.upTask = true;
         this.currentTask = task;
-        this.taskform = this.fb.group({
+        this.taskForm = this.fb.group({
             name: [task.name, Validators.required],
             description: [task.description, Validators.required],
             complete: [task.complete]
@@ -122,7 +124,7 @@ export class DashboardComponent implements OnInit {
     //Update task
     updateTask() {
         let task = this.currentTask;
-        let val = this.taskform.value;
+        let val = this.taskForm.value;
         task.name = val.name;
         task.description = val.description;
         task.complete = val.complete;
@@ -135,7 +137,7 @@ export class DashboardComponent implements OnInit {
     updateProjectModel(project, content) {
 
         this.currentProject = project;
-        this.form = this.fb.group({
+        this.projectForm = this.fb.group({
             name: [project.name, Validators.required]
         });
         this.modalService.open(content).result.then((result) => {
@@ -148,11 +150,11 @@ export class DashboardComponent implements OnInit {
     //Update task
     updateProject() {
         let project = this.currentProject;
-        let val = this.form.value;
+        let val = this.projectForm.value;
         project.name = val.name;
         this.store.dispatch(new projectActions.UpdateProject(project));
         this.currentProject = null;
-        this.form = this.fb.group({
+        this.projectForm = this.fb.group({
             name: ['', Validators.required]
         });
     }
@@ -227,12 +229,12 @@ export class DashboardComponent implements OnInit {
         
     }
     isNameNotEmpty() {
-        const val = this.form.value;
+        const val = this.projectForm.value;
         return val && val.name;
     }
 
     isNotempty() {
-        const val = this.taskform.value;
+        const val = this.taskForm.value;
         return val && val.name && val.description;
     }
 

@@ -43,7 +43,7 @@
                         <label class="lb-crt-project" for="card-body">
                             <h4>Create New Project</h4>
                         </label>
-                        <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="form">
+                        <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
                             <div class="form-content">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -71,7 +71,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="taskform">
+                <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="taskForm">
                     <div class="form-content">
                         <div class="form-group">
                             <input class="form-control input-underline input-lg" name="name" formControlName="name" placeholder="Task Name">
@@ -116,7 +116,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="form">
+                    <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
                         <div class="form-content">
                             <div class="form-group">
                                 <input class="form-control input-underline input-lg" name="name" formControlName="name" placeholder="Project Name">
@@ -127,6 +127,6 @@
                 <div class="modal-footer"> 
                     <button type="button"  class="btn btn-outline-dark" (click)="updateProject()" [disabled]="!isNameNotEmpty()" (click)="d('Cross click')">updateProject</button>
                 </div>
-            </ng-template>
+        </ng-template>
     </div>
 </div>
