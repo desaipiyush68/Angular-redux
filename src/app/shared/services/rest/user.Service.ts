@@ -14,14 +14,14 @@ export class UserService {
 
   public registration(name: string, email: string, password: string): Observable<any> {
 
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     let headers = new Headers({ 'Authorization': token });
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json;');
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Access-Control-Allow-Credentials', 'true');
-    let options = new RequestOptions({ headers: headers });
-    let body = JSON.stringify({ name: name, email: email, password: password });
+    const options = new RequestOptions({ headers: headers });
+    const body = JSON.stringify({ name: name, email: email, password: password });
     return this.http.post(`${Constants.URL}/auth/register`, body, options).map(res => res.json());
    
 
@@ -29,14 +29,14 @@ export class UserService {
 
   public login(Email: any, Password?: any): Observable<any> {
  
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     let headers = new Headers({ 'Authorization': token });
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json;');
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Access-Control-Allow-Credentials', 'true');
-    let options = new RequestOptions({ headers: headers });
-    let body: string = JSON.stringify({ email: Email, password: Password });
+    const options = new RequestOptions({ headers: headers });
+    const body: string = JSON.stringify({ email: Email, password: Password });
     return this.http.post(`${Constants.URL}/auth/login`, body, options).map(res => res.json());
 
   }
@@ -44,7 +44,7 @@ export class UserService {
   public logout() {
 
     localStorage.removeItem('token');
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       this.router.navigate(['/login']);
       let logout: Observable<any> = new Subject();
@@ -55,9 +55,9 @@ export class UserService {
 
   public GetProfile(): Observable<any> {
 
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     let headers = new Headers({ 'Authorization': token });
-    let options = new RequestOptions({ headers: headers });
+    const options = new RequestOptions({ headers: headers });
     return this.http.get(`${Constants.URL}/auth/profile`, options).map(res => res.json());
   
   }
