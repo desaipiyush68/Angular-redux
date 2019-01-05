@@ -4,22 +4,47 @@
             <div *ngFor="let project of Projects" class="pt-box" class="col-lg-4 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <label for="project">{{project.name}}
-                            <i class="fa fa-pencil-square-o updateTask" (click)='updateProjectModel(project,projectcontent)' aria-hidden="true"></i>
-                            <i class="fa fa-trash-o deleteTask" (click)='deleteProjectModel(project,deletecontent)' aria-hidden="true"></i>
+                        <label for="project"
+                            >{{ project.name }}
+                            <i
+                                class="fa fa-pencil-square-o updateTask"
+                                (click)="updateProjectModel(project, projectcontent)"
+                                aria-hidden="true"
+                            ></i>
+                            <i
+                                class="fa fa-trash-o deleteTask"
+                                (click)="deleteProjectModel(project, deletecontent)"
+                                aria-hidden="true"
+                            ></i>
                         </label>
-                        <label class="add-task-header" for="for-add-task">AddTask
-                            <i class="fa fa-plus-circle createTask" (click)="addTaskModel(project._id,content)"></i>
+                        <label class="add-task-header" for="for-add-task"
+                            >AddTask
+                            <i
+                                class="fa fa-plus-circle createTask"
+                                (click)="addTaskModel(project._id, content)"
+                            ></i>
                         </label>
                     </div>
                     <div class="todo">
                         <label class="lb-todo" for="todo">To Do</label>
                         <ul *ngFor="let task of project.tasks" class="list-group list-group-flush">
                             <li *ngIf="notCompleted(task.complete)" class="list-group-item">
-                                <input type="checkbox" (change)="taskCompleteChanged(task)" aria-label="Checkbox for following text input">
+                                <input
+                                    type="checkbox"
+                                    (change)="taskCompleteChanged(task)"
+                                    aria-label="Checkbox for following text input"
+                                />
                                 <span class="task-list">{{ task.name }}</span>
-                                <i class="fa fa-pencil-square-o updateTask" (click)='updateTaskModel(task,project,content)' aria-hidden="true"></i>
-                                <i class="fa fa-trash-o deleteTask" (click)='deleteTaskModel(task,deletecontent)' aria-hidden="true"></i>
+                                <i
+                                    class="fa fa-pencil-square-o updateTask"
+                                    (click)="updateTaskModel(task, project, content)"
+                                    aria-hidden="true"
+                                ></i>
+                                <i
+                                    class="fa fa-trash-o deleteTask"
+                                    (click)="deleteTaskModel(task, deletecontent)"
+                                    aria-hidden="true"
+                                ></i>
                             </li>
                         </ul>
                     </div>
@@ -27,7 +52,13 @@
                         <label class="lb-done" for="done">Done</label>
                         <ul *ngFor="let task of project.tasks" class="list-group list-group-flush">
                             <li *ngIf="completed(task.complete)" class="list-group-item">
-                                <input type="checkbox" [checked]="true" (change)="taskCompleteChanged(task)" aria-label="Checkbox for following text input"> {{ task.name }}
+                                <input
+                                    type="checkbox"
+                                    [checked]="true"
+                                    (change)="taskCompleteChanged(task)"
+                                    aria-label="Checkbox for following text input"
+                                />
+                                {{ task.name }}
                             </li>
                         </ul>
                     </div>
@@ -41,26 +72,42 @@
                             <h4>Create New Project</h4>
                         </label>
 
-                        <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
+                        <form
+                            role="form"
+                            autocomplete="off"
+                            novalidate
+                            class="task-form"
+                            [formGroup]="projectForm"
+                        >
                             <div class="form-content">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input class="form-control input-add-project" name="name" formControlName="name" placeholder="Project Name">
+                                        <input
+                                            class="form-control input-add-project"
+                                            name="name"
+                                            formControlName="name"
+                                            placeholder="Project Name"
+                                        />
                                     </div>
                                     <div class="input-group">
-                                        <button type="button" class="btn btn-primary btn-block btn-add-project" [disabled]="!isNameNotEmpty()" (click)="addProject()">Add</button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-primary btn-block btn-add-project"
+                                            [disabled]="!isNameNotEmpty()"
+                                            (click)="addProject()"
+                                        >
+                                            Add
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        
         <ng-template #content let-c="close" let-d="dismiss">
             <div class="modal-header">
                 <h4 class="modal-title" *ngIf="crTask">CreateTask</h4>
@@ -70,22 +117,54 @@
                 </button>
             </div>
             <div class="modal-body">
-
-                <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="taskForm">
+                <form
+                    role="form"
+                    autocomplete="off"
+                    novalidate
+                    class="task-form"
+                    [formGroup]="taskForm"
+                >
                     <div class="form-content">
                         <div class="form-group">
-                            <input class="form-control input-underline input-lg" name="name" formControlName="name" placeholder="Task Name">
+                            <input
+                                class="form-control input-underline input-lg"
+                                name="name"
+                                formControlName="name"
+                                placeholder="Task Name"
+                            />
                         </div>
                         <div class="form-group">
-                            <input class="form-control input-underline input-lg" name="description" formControlName="description" placeholder="Description">
+                            <input
+                                class="form-control input-underline input-lg"
+                                name="description"
+                                formControlName="description"
+                                placeholder="Description"
+                            />
                         </div>
                     </div>
                 </form>
-
             </div>
             <div class="modal-footer">
-                <button type="button" *ngIf="crTask" class="btn btn-outline-dark" (click)="addTask()" [disabled]="!isNotempty()" (click)="d('Cross click')">CreateTask</button>
-                <button type="button" *ngIf="upTask" class="btn btn-outline-dark" (click)="updateTask()" [disabled]="!isNotempty()" (click)="d('Cross click')">updateTask</button>
+                <button
+                    type="button"
+                    *ngIf="crTask"
+                    class="btn btn-outline-dark"
+                    (click)="addTask()"
+                    [disabled]="!isNotempty()"
+                    (click)="d('Cross click')"
+                >
+                    CreateTask
+                </button>
+                <button
+                    type="button"
+                    *ngIf="upTask"
+                    class="btn btn-outline-dark"
+                    (click)="updateTask()"
+                    [disabled]="!isNotempty()"
+                    (click)="d('Cross click')"
+                >
+                    updateTask
+                </button>
             </div>
         </ng-template>
 
@@ -98,15 +177,36 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <span>Are you sure ?</span>
-                </div>
+                <div class="row"><span>Are you sure ?</span></div>
             </div>
             <div class="modal-footer">
                 <div class="row">
-                    <button type="button" class="btn btn-default" style="margin-right:10px;" (click)="d('Cross click')">Cancel</button>
-                    <button type="button" *ngIf="dltTask" class="btn btn-danger" (click)="deleteTask()" (click)="d('Cross click')">Delete</button>
-                    <button type="button" *ngIf="dltProject" class="btn btn-danger" (click)="deleteProject()" (click)="d('Cross click')">Delete</button>
+                    <button
+                        type="button"
+                        class="btn btn-default"
+                        style="margin-right:10px;"
+                        (click)="d('Cross click')"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        *ngIf="dltTask"
+                        class="btn btn-danger"
+                        (click)="deleteTask()"
+                        (click)="d('Cross click')"
+                    >
+                        Delete
+                    </button>
+                    <button
+                        type="button"
+                        *ngIf="dltProject"
+                        class="btn btn-danger"
+                        (click)="deleteProject()"
+                        (click)="d('Cross click')"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         </ng-template>
@@ -119,18 +219,36 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form role="form" autocomplete="off" novalidate class="task-form" [formGroup]="projectForm">
+                <form
+                    role="form"
+                    autocomplete="off"
+                    novalidate
+                    class="task-form"
+                    [formGroup]="projectForm"
+                >
                     <div class="form-content">
                         <div class="form-group">
-                            <input class="form-control input-underline input-lg" name="name" formControlName="name" placeholder="Project Name">
+                            <input
+                                class="form-control input-underline input-lg"
+                                name="name"
+                                formControlName="name"
+                                placeholder="Project Name"
+                            />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" (click)="updateProject()" [disabled]="!isNameNotEmpty()" (click)="d('Cross click')">updateProject</button>
+                <button
+                    type="button"
+                    class="btn btn-outline-dark"
+                    (click)="updateProject()"
+                    [disabled]="!isNameNotEmpty()"
+                    (click)="d('Cross click')"
+                >
+                    updateProject
+                </button>
             </div>
         </ng-template>
-
     </div>
 </div>

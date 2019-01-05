@@ -14,46 +14,41 @@ export type Actiontask = taskActions.All;
 import * as projectActions from '../actions/project.actions';
 export type Actionproject = projectActions.All;
 
-
-
 @Injectable()
 export class TaskEffects {
-  constructor(private actions: Actions,
-    private taskService: TaskService) { }
+    constructor(private actions: Actions, private taskService: TaskService) {}
 
+    // tslint:disable-next-line:member-ordering
+    @Effect()
+    createTask: Observable<Actionproject> = this.actions
+        .ofType(taskActions.CREAT_TASK)
+        .map((action: taskActions.CreateTask) => action.payload)
+        .switchMap(payload =>
+            this.taskService.createTask(payload.name, payload.description, payload.pid)
+        )
+        .map(res => new projectActions.GetProjectList());
 
-  @Effect()
-  createTask: Observable<Actionproject> = this.actions.ofType(taskActions.CREAT_TASK)
-    .map((action: taskActions.CreateTask) => action.payload)
-    .switchMap(payload => this.taskService.createTask(payload.name, payload.description, payload.pid)
-      .map(res => {
-        return new projectActions.GetProjectList();
-      }));
+    // tslint:disable-next-line:member-ordering
+    @Effect()
+    getTaskList: Observable<Actiontask> = this.actions
+        .ofType(taskActions.GET_TASK_LIST)
+        .map((action: taskActions.GetTaskList) => action.payload)
+        .switchMap(payload => this.taskService.getTasks(payload.pid))
+        .map(res => new taskActions.GetTaskListSuccess(res));
 
+    // tslint:disable-next-line:member-ordering
+    @Effect()
+    updateTask: Observable<Actiontask> = this.actions
+        .ofType(taskActions.UPDATE_TASK)
+        .map((action: taskActions.UpdateTask) => action.payload)
+        .switchMap(payload => this.taskService.updateTask(payload))
+        .map(res => new taskActions.UpdateTaskSuccess(res));
 
-  @Effect()
-  getTaskList: Observable<Actiontask> = this.actions.ofType(taskActions.GET_TASK_LIST)
-    .map((action: taskActions.GetTaskList) => action.payload)
-    .switchMap(payload => this.taskService.getTasks(payload.pid))
-    .map(payload => {
-      return new taskActions.GetTaskListSuccess(payload);
-    });
-
-  @Effect()
-  updateTask: Observable<Actiontask> = this.actions.ofType(taskActions.UPDATE_TASK)
-    .map((action: taskActions.UpdateTask) => action.payload)
-    .switchMap(payload => this.taskService.updateTask(payload)
-      .map(res => {
-        return new taskActions.UpdateTaskSuccess(res);
-      }));
-
-  @Effect()
-  deleteTask: Observable<Actionproject> = this.actions.ofType(taskActions.DELETE_TASK)
-    .map((action: taskActions.DeleteTask) => action.payload)
-    .switchMap(payload => this.taskService.deleteTask(payload)
-      .map(res => {
-        return new projectActions.GetProjectList(res);
-      }));
-
-
+    // tslint:disable-next-line:member-ordering
+    @Effect()
+    deleteTask: Observable<Actionproject> = this.actions
+        .ofType(taskActions.DELETE_TASK)
+        .map((action: taskActions.DeleteTask) => action.payload)
+        .switchMap(payload => this.taskService.deleteTask(payload))
+        .map(res => new projectActions.GetProjectList(res));
 }

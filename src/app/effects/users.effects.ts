@@ -11,43 +11,45 @@ import 'rxjs/add/operator/delay';
 import * as userActions from '../actions/users.actions';
 export type Action = userActions.All;
 
-
 @Injectable()
 export class UserEffects {
-    constructor(private actions: Actions,
+    constructor(
+        private actions: Actions,
         private userService: UserService,
-        private router: Router) { }
+        private router: Router
+    ) {}
 
+    // tslint:disable-next-line:member-ordering
     @Effect()
-    createUser: Observable<Action> = this.actions.ofType(userActions.SIGNUP_REQUESTED)
+    createUser: Observable<Action> = this.actions
+        .ofType(userActions.SIGNUP_REQUESTED)
         .map((action: userActions.Signup) => action.payload)
-        .switchMap(payload => this.userService.registration(payload.name, payload.email, payload.password)
-            .map(res => {
-                return new userActions.SignupSuccess(res);
-            }));
+        .switchMap(payload =>
+            this.userService.registration(payload.name, payload.email, payload.password)
+        )
+        .map(res => new userActions.SignupSuccess(res));
 
+    // tslint:disable-next-line:member-ordering
     @Effect()
-    login: Observable<Action> = this.actions.ofType(userActions.LOGIN_REQUESTED)
+    login: Observable<Action> = this.actions
+        .ofType(userActions.LOGIN_REQUESTED)
         .map((action: userActions.Login) => action.payload)
-        .switchMap(payload => this.userService.login(payload.email, payload.password)
-            .map(res => {
-                return new userActions.LoginSuccess(res);
-            }));
+        .switchMap(payload => this.userService.login(payload.email, payload.password))
+        .map(res => new userActions.LoginSuccess(res));
 
+    // tslint:disable-next-line:member-ordering
     @Effect()
     logout: Observable<Action> = this.actions
         .ofType(userActions.LOGOUT_REQUESTED)
         .map((action: userActions.Logout) => action)
-        .switchMap(() => this.userService.logout()
-            .map(() => {
-                return new userActions.LogoutSuccess();
-            }));
+        .switchMap(() => this.userService.logout())
+        .map(() => new userActions.LogoutSuccess());
 
+    // tslint:disable-next-line:member-ordering
     @Effect()
-    profile: Observable<Action> = this.actions.ofType(userActions.GET_USER_PROFILE)
+    profile: Observable<Action> = this.actions
+        .ofType(userActions.GET_USER_PROFILE)
         .map((action: userActions.GetProfile) => action.payload)
-        .switchMap(payload => this.userService.GetProfile()
-            .map(res => {
-                return new userActions.GetProfileSuccess(res);
-            }));
+        .switchMap(() => this.userService.GetProfile())
+        .map(res => new userActions.GetProfileSuccess(res));
 }
