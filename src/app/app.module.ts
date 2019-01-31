@@ -10,16 +10,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-//Data services
+// Data services
 import { UserService } from './shared/services/rest/user.Service';
 import { ProjectService } from './shared/services/rest/project.Service';
 import { TaskService } from './shared/services/rest/task.Service';
-//@Ngrx
+// @Ngrx
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-//reduces and Actions
+// reduces and Actions
 import { UserEffects } from './effects/users.effects';
 import { ProjectEffects } from './effects/project.effects';
 import { TaskEffects } from './effects/task.effects';
@@ -27,18 +27,15 @@ import { UserReducer } from './reducers/users.reducers';
 import { ProjectReducer } from './reducers/project.reducers';
 import { TaskReducer } from './reducers/task.reducers';
 
-
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
     // for development
     // return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-4/master/dist/assets/i18n/', '.json');
     return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-    //return new TranslateHttpLoader(http);
+    // return new TranslateHttpLoader(http);
 }
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
+    declarations: [AppComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -57,15 +54,14 @@ export function HttpLoaderFactory(http: Http) {
         StoreModule.forRoot({
             user: UserReducer,
             project: ProjectReducer,
-            task:TaskReducer
+            task: TaskReducer
         }),
         StoreDevtoolsModule.instrument({
             maxAge: 10
         }),
-        EffectsModule.forRoot([UserEffects, ProjectEffects,TaskEffects])
+        EffectsModule.forRoot([UserEffects, ProjectEffects, TaskEffects])
     ],
-    providers: [AuthGuard, UserService, ProjectService,TaskService],
+    providers: [AuthGuard, UserService, ProjectService, TaskService],
     bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
