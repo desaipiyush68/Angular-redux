@@ -12,6 +12,7 @@ import * as taskActions from '../actions/task.actions';
 export type Actiontask = taskActions.All;
 
 import * as projectActions from '../actions/project.actions';
+import { Task } from '../shared/models/task.model';
 export type Actionproject = projectActions.All;
 
 @Injectable()
@@ -24,7 +25,7 @@ export class TaskEffects {
         .ofType(taskActions.CREAT_TASK)
         .map((action: taskActions.CreateTask) => action.payload)
         .switchMap(payload =>
-            this.taskService.createTask(payload.name, payload.description, payload.pid)
+            this.taskService.createTask(payload.name, payload.description, payload._project)
         )
         .map(res => new projectActions.GetProjectList());
 
@@ -41,7 +42,7 @@ export class TaskEffects {
     updateTask: Observable<Actiontask> = this.actions
         .ofType(taskActions.UPDATE_TASK)
         .map((action: taskActions.UpdateTask) => action.payload)
-        .switchMap(payload => this.taskService.updateTask(payload))
+        .switchMap((payload: Task) => this.taskService.updateTask(payload))
         .map(res => new taskActions.UpdateTaskSuccess(res));
 
     // tslint:disable-next-line:member-ordering

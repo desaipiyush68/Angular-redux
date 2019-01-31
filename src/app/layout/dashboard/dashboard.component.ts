@@ -30,7 +30,7 @@ export class DashboardComponent {
     crTask: boolean;
     upTask: boolean;
     pid: string;
-    currentTask: any;
+    currentTask: Task;
     complete: boolean;
     dltTask: boolean;
     dltProject: boolean;
@@ -90,7 +90,7 @@ export class DashboardComponent {
     // cerate Task
     addTask() {
         const val = this.taskForm.value;
-        const payload = { name: val.name, description: val.description, pid: this.pid };
+        const payload = { name: val.name, description: val.description, _project: this.pid };
         this.store.dispatch(new taskActions.CreateTask(payload));
         this.pid = null;
         this.taskForm = this.fb.group({

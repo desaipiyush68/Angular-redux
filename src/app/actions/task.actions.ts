@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Data } from '@angular/router/src/config';
+import { Task } from '../shared/models/task.model';
 
 export const GET_TASK_LIST = 'Task get list';
 export const GET_TASK_LIST_SUCCESS = 'Task get list success';
@@ -22,7 +23,7 @@ export class GetTaskListSuccess implements Action {
 
 export class CreateTask implements Action {
     readonly type = CREAT_TASK;
-    constructor(public payload: any) {}
+    constructor(public payload: Task) {}
 }
 
 export class CreateTaskSuccess implements Action {
@@ -32,7 +33,7 @@ export class CreateTaskSuccess implements Action {
 
 export class UpdateTask implements Action {
     readonly type = UPDATE_TASK;
-    constructor(public payload: any) {}
+    constructor(public payload: Task) {}
 }
 export class UpdateTaskSuccess implements Action {
     readonly type = UPDATE_TASK_SUCCESS;
