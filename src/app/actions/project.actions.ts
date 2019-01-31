@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import { Data } from '@angular/router/src/config';
 
 export const GET_PROJECT_LIST = 'Project get list';
 export const GET_PROJECT_LIST_SUCCESS = 'Project get list success';
