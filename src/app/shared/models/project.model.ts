@@ -1,7 +1,6 @@
 import { Task } from './task.model';
 
-export class Project{
-
+export class Project {
     constructor(
         public _id: string,
         public name: string,
@@ -11,5 +10,5 @@ export class Project{
         public createAt: Date,
         public tasks: Array<Task>,
         public slug: string
-    ){}
+    ) {}
 }

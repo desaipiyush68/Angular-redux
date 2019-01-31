@@ -1,5 +1,4 @@
-export class Task{
-
+export class Task {
     constructor(
         public name: string,
         public description: string,
@@ -8,6 +7,5 @@ export class Task{
         public updatedAt: Date,
         public createAt: Date,
         public complete: number
-    ){}
-    
+    ) {}
 }
