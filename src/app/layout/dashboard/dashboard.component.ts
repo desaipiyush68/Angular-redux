@@ -218,11 +218,13 @@ export class DashboardComponent {
     }
 
     notCompleted(value) {
-        return value === 0 ? true : false;
+        return value === 0;
     }
+
     completed(value) {
-        return value === 1 ? true : false;
+        return value === 1;
     }
+
     isNameNotEmpty() {
         const val = this.projectForm.value;
         return val && val.name;
@@ -236,12 +238,10 @@ export class DashboardComponent {
     private getDismissReason(reason: any): string {
         this.crTask = true;
         this.upTask = false;
-        if (reason === ModalDismissReasons.ESC) {
-            return 'by pressing ESC';
-        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-            return 'by clicking on a backdrop';
-        } else {
-            return `with: ${reason}`;
-        }
+        return reason === ModalDismissReasons.ESC
+            ? 'by pressing ESC'
+            : reason === ModalDismissReasons.BACKDROP_CLICK
+            ? 'by clicking on a backdrop'
+            : `with: ${reason}`;
     }
 }
