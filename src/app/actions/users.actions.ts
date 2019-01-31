@@ -10,7 +10,7 @@ export const GET_USER_PROFILE = 'Get User Profile';
 export const GET_USER_PROFILE_SUCCESS = 'Get User Profile Success';
 export const AUTH_ERROR = 'Auth Error';
 
-export interface Login {
+export interface LoginModel {
     email: string;
     password: string;
 }
@@ -23,7 +23,7 @@ export interface Register {
 
 export class Login implements Action {
     readonly type = LOGIN_REQUESTED;
-    constructor(public payload: Login) {}
+    constructor(public payload: LoginModel) {}
 }
 
 export class LoginSuccess implements Action {
