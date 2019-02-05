@@ -5,60 +5,44 @@ import { Observable } from 'rxjs/Observable';
 
 import * as Constants from '../app.constant';
 import { Project } from '../../models/project.model';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 
 @NgModule({})
 export class ProjectService {
-    constructor(public http: Http) {}
+    constructor(public http: HttpClient) {}
 
     public createProject(name: string): Observable<Project> {
         const token = localStorage.getItem('token');
-        const headers = new Headers({ Authorization: token });
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json;');
-        headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
-        const options = new RequestOptions({ headers: headers });
-        const body = JSON.stringify({ name: name, slug: name });
-        return this.http
-            .post(`${Constants.URL}/project/create`, body, options)
-            .map(res => res.json());
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+        const body = { name: name, slug: name };
+        return this.http.post<Project>(`${Constants.URL}/project`, body, {
+            headers: headers
+        });
     }
 
     public getProjects(): Observable<Array<Project>> {
         const token = localStorage.getItem('token');
-        const headers = new Headers({ Authorization: token });
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json;');
-        headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
-        const options = new RequestOptions({ headers: headers });
-        return this.http.get(`${Constants.URL}/project`, options).map(res => res.json());
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+        return this.http.get<Array<Project>>(`${Constants.URL}/project`, { headers: headers });
     }
 
-    public updateProject(project): Observable<Project> {
+    public updateProject(project: Project): Observable<Project> {
         const token = localStorage.getItem('token');
-        const headers = new Headers({ Authorization: token });
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json;');
-        headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
-        const options = new RequestOptions({ headers: headers });
-        const body = JSON.stringify({ project });
-        return this.http
-            .put(`${Constants.URL}/project/update`, body, options)
-            .map(res => res.json());
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+        const body = { projectId: project._id, name: project.name, slug: project.slug };
+        return this.http.put<Project>(`${Constants.URL}/project`, body, {
+            headers: headers
+        });
     }
 
     public deleteProject(project): Observable<any> {
         const token: string = localStorage.getItem('token');
-        const headers: Headers = new Headers({ Authorization: token });
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json;');
-        headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
-        const options: RequestOptions = new RequestOptions({ headers: headers });
-        return this.http
-            .delete(`${Constants.URL}/project/delete/${project._id}`, options)
-            .map(res => res.json());
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+        return this.http.delete(`${Constants.URL}/project/${project._id}`, {
+            headers: headers
+        });
     }
 }

@@ -1,4 +1,3 @@
-import { Http, Headers, RequestOptions } from '@angular/http';
 import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
@@ -6,37 +5,22 @@ import { Observable } from 'rxjs/Observable';
 
 import * as Constants from '../app.constant';
 import { Subject } from 'rxjs/Subject';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @NgModule({})
 export class UserService {
-    constructor(private http: Http, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router) {}
 
     public registration(name: string, email: string, password: string): Observable<any> {
-        const token = localStorage.getItem('token');
-        const headers = new Headers({ Authorization: token });
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json;');
-        headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
-        const options = new RequestOptions({ headers: headers });
         const body = JSON.stringify({ name: name, email: email, password: password });
-        return this.http
-            .post(`${Constants.URL}/auth/register`, body, options)
-            .map(res => res.json());
+        return this.http.post(`${Constants.URL}/user`, body);
     }
 
     public login(Email: any, Password?: any): Observable<any> {
-        const token = localStorage.getItem('token');
-        const headers = new Headers({ Authorization: token });
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json;');
-        headers.append('Access-Control-Allow-Origin', '*');
-        headers.append('Access-Control-Allow-Credentials', 'true');
-        const options = new RequestOptions({ headers: headers });
-        const body: string = JSON.stringify({ email: Email, password: Password });
-        return this.http.post(`${Constants.URL}/auth/login`, body, options).map(res => res.json());
+        const body = { email: Email, password: Password };
+        return this.http.post(`${Constants.URL}/auth`, body);
     }
 
-    public logout() {
+    public logout(): Observable<any> {
         localStorage.removeItem('token');
         const token = localStorage.getItem('token');
         if (!token) {
@@ -48,8 +32,7 @@ export class UserService {
 
     public GetProfile(): Observable<any> {
         const token = localStorage.getItem('token');
-        const headers = new Headers({ Authorization: token });
-        const options = new RequestOptions({ headers: headers });
-        return this.http.get(`${Constants.URL}/auth/profile`, options).map(res => res.json());
+        const headers = new HttpHeaders({ Authorization: token });
+        return this.http.get(`${Constants.URL}/auth/profile`, { headers: headers });
     }
 }
