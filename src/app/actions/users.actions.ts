@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { LoginResponse } from '../login/models/login-response.models';
 
 export const LOGIN_REQUESTED = 'Login Requested';
 export const LOGIN_SUCCESS = 'Login Success';
@@ -28,7 +29,7 @@ export class Login implements Action {
 
 export class LoginSuccess implements Action {
     readonly type = LOGIN_SUCCESS;
-    constructor(public payload: any) {}
+    constructor(public payload: LoginResponse) {}
 }
 
 export class Logout implements Action {
