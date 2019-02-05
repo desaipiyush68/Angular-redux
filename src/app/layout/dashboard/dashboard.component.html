@@ -28,10 +28,10 @@
                     <div class="todo">
                         <label class="lb-todo" for="todo">To Do</label>
                         <ul *ngFor="let task of project.tasks" class="list-group list-group-flush">
-                            <li *ngIf="notCompleted(task.complete)" class="list-group-item">
+                            <li *ngIf="!task.complete" class="list-group-item">
                                 <input
                                     type="checkbox"
-                                    (change)="taskCompleteChanged(task)"
+                                    (change)="taskCompleteChanged(task, project._id)"
                                     aria-label="Checkbox for following text input"
                                 />
                                 <span class="task-list">{{ task.name }}</span>
@@ -51,11 +51,11 @@
                     <div class="done">
                         <label class="lb-done" for="done">Done</label>
                         <ul *ngFor="let task of project.tasks" class="list-group list-group-flush">
-                            <li *ngIf="completed(task.complete)" class="list-group-item">
+                            <li *ngIf="task.complete" class="list-group-item">
                                 <input
                                     type="checkbox"
                                     [checked]="true"
-                                    (change)="taskCompleteChanged(task)"
+                                    (change)="taskCompleteChanged(task, project._id)"
                                     aria-label="Checkbox for following text input"
                                 />
                                 {{ task.name }}

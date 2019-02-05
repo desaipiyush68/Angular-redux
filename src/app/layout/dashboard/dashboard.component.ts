@@ -1,12 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { routerTransition } from '../../router.animations';
-import { error } from 'selenium-webdriver';
 import { AppState } from '../../store/store';
 import { Store } from '@ngrx/store';
 import * as projectActions from 'app/actions/project.actions';
-import * as taskActions from 'app/actions/task.actions';
 import { FormGroup, FormBuilder, Validators, NgModel } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Task } from '../../shared/models/task.model';
@@ -21,7 +18,6 @@ import { Project } from '../../shared/models/project.model';
 })
 export class DashboardComponent {
     project$: Observable<any>;
-    task$: Observable<any>;
     Projects: Array<Project>;
     Tasks: Array<Task>;
     projectForm: FormGroup;
@@ -29,12 +25,11 @@ export class DashboardComponent {
     closeResult: string;
     crTask: boolean;
     upTask: boolean;
-    pid: string;
     currentTask: Task;
     complete: boolean;
     dltTask: boolean;
     dltProject: boolean;
-    currentProject: any;
+    currentProject: Project;
 
     constructor(
         private store: Store<AppState>,
@@ -42,7 +37,6 @@ export class DashboardComponent {
         private modalService: NgbModal
     ) {
         this.project$ = this.store.select('project');
-        this.task$ = this.store.select('task');
         this.projectForm = this.fb.group({
             name: ['', Validators.required]
         });
@@ -50,14 +44,12 @@ export class DashboardComponent {
         this.upTask = false;
         this.dltTask = false;
         this.dltProject = false;
-        this.refreshProject();
+        this.getProjects();
     }
 
-    refreshProject(): void {
+    getProjects(): void {
         this.store.dispatch(new projectActions.GetProjectList());
-        this.project$.subscribe(data => {
-            this.Projects = data.project.projects;
-        });
+        this.project$.subscribe(response => (this.Projects = response.project));
     }
 
     // create Project
@@ -73,9 +65,10 @@ export class DashboardComponent {
         // Initaite form
         this.taskForm = this.fb.group({
             name: ['', Validators.required],
-            description: ['', Validators.required]
+            description: ['', Validators.required],
+            _project: [pid, Validators.required],
+            complete: [false, Validators.required]
         });
-        this.pid = pid;
         // Open Model
         this.modalService.open(content).result.then(
             result => {
@@ -89,21 +82,15 @@ export class DashboardComponent {
 
     // cerate Task
     addTask() {
-        const val = this.taskForm.value;
-        const payload = { name: val.name, description: val.description, _project: this.pid };
-        this.store.dispatch(new taskActions.CreateTask(payload));
-        this.pid = null;
-        this.taskForm = this.fb.group({
-            name: ['', Validators.required],
-            description: ['', Validators.required],
-            complete: [0]
-        });
+        this.store.dispatch(new projectActions.CreateTask(this.taskForm.value));
+        this.taskForm = null;
     }
 
-    updateTaskModel(task, project, content) {
+    updateTaskModel(task: Task, project: Project, content) {
         this.crTask = false;
         this.upTask = true;
         this.currentTask = task;
+        this.currentTask._project = project._id;
         this.taskForm = this.fb.group({
             name: [task.name, Validators.required],
             description: [task.description, Validators.required],
@@ -126,7 +113,7 @@ export class DashboardComponent {
         task.name = val.name;
         task.description = val.description;
         task.complete = val.complete;
-        this.store.dispatch(new taskActions.UpdateTask(task));
+        this.store.dispatch(new projectActions.UpdateTask(task));
         this.currentTask = null;
         this.crTask = true;
         this.upTask = false;
@@ -178,7 +165,7 @@ export class DashboardComponent {
     // Delete Task //pass task
     deleteTask() {
         const task = this.currentTask;
-        this.store.dispatch(new taskActions.DeleteTask(task));
+        this.store.dispatch(new projectActions.DeleteTask(task));
         this.currentTask = null;
     }
 
@@ -205,24 +192,10 @@ export class DashboardComponent {
         this.currentProject = null;
     }
 
-    taskCompleteChanged(tsk) {
-        if (tsk.complete === 0) {
-            tsk.complete = 1;
-            const task = tsk;
-            this.store.dispatch(new taskActions.UpdateTask(task));
-        } else {
-            tsk.complete = 0;
-            const task = tsk;
-            this.store.dispatch(new taskActions.UpdateTask(task));
-        }
-    }
-
-    notCompleted(value) {
-        return value === 0;
-    }
-
-    completed(value) {
-        return value === 1;
+    taskCompleteChanged(tsk: Task, projectId: string) {
+        tsk._project = projectId;
+        tsk.complete = tsk.complete ? false : true;
+        this.store.dispatch(new projectActions.UpdateTask(tsk));
     }
 
     isNameNotEmpty() {
