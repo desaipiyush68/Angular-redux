@@ -30,7 +30,14 @@ export function ProjectReducer(state = initialState, action: Action) {
         case projectActions.DELETE_PROJECT:
             return { ...state, ...action.payload, loading: true };
         case projectActions.DELETE_PROJECT_SUCCESS:
-            return { ...state, loading: false };
+            return {
+                project: [
+                    ...state.project.filter(
+                        (deleteproject: Project) => deleteproject._id !== action.payload._id
+                    )
+                ],
+                loading: false
+            };
         case projectActions.CREAT_TASK:
             return { ...state, ...action.payload, loading: true };
         case projectActions.CREAT_TASK_SUCCESS:
@@ -64,7 +71,19 @@ export function ProjectReducer(state = initialState, action: Action) {
         case projectActions.DELETE_TASK:
             return { ...state, ...action.payload, loading: true };
         case projectActions.DELETE_TASK_SUCCESS:
-            return { ...state, loading: false };
+            return {
+                project: state.project.map((selectedProject: Project) =>
+                    selectedProject._id !== action.payload._project
+                        ? selectedProject
+                        : {
+                              ...selectedProject,
+                              tasks: selectedProject.tasks.filter(
+                                  (task: Task) => task._id !== action.payload._id
+                              )
+                          }
+                ),
+                loading: false
+            };
         default:
             return state;
     }

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { AppState } from '../../store/store';
 import { Store } from '@ngrx/store';
@@ -16,7 +16,7 @@ import { Project } from '../../shared/models/project.model';
     animations: [routerTransition()],
     encapsulation: ViewEncapsulation.None
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
     project$: Observable<any>;
     Projects: Array<Project>;
     Tasks: Array<Task>;
@@ -44,6 +44,9 @@ export class DashboardComponent {
         this.upTask = false;
         this.dltTask = false;
         this.dltProject = false;
+    }
+
+    ngOnInit(): void {
         this.getProjects();
     }
 
@@ -52,7 +55,6 @@ export class DashboardComponent {
         this.project$.subscribe(response => (this.Projects = response.project));
     }
 
-    // create Project
     addProject() {
         const val = this.projectForm.value;
         this.store.dispatch(new projectActions.CreateProject(val));
@@ -62,14 +64,13 @@ export class DashboardComponent {
     }
 
     addTaskModel(pid, content) {
-        // Initaite form
         this.taskForm = this.fb.group({
             name: ['', Validators.required],
             description: ['', Validators.required],
             _project: [pid, Validators.required],
             complete: [false, Validators.required]
         });
-        // Open Model
+
         this.modalService.open(content).result.then(
             result => {
                 this.closeResult = `Closed with: ${result}`;
@@ -80,7 +81,6 @@ export class DashboardComponent {
         );
     }
 
-    // cerate Task
     addTask() {
         this.store.dispatch(new projectActions.CreateTask(this.taskForm.value));
         this.taskForm = null;
@@ -106,7 +106,6 @@ export class DashboardComponent {
         );
     }
 
-    // Update task
     updateTask() {
         const task = this.currentTask;
         const val = this.taskForm.value;
@@ -134,20 +133,30 @@ export class DashboardComponent {
         );
     }
 
-    // Update task
     updateProject() {
-        const project = this.currentProject;
-        const val = this.projectForm.value;
-        project.name = val.name;
-        this.store.dispatch(new projectActions.UpdateProject(project));
+        this.store.dispatch(
+            new projectActions.UpdateProject(
+                new Project(
+                    this.currentProject._id,
+                    this.projectForm.value.name,
+                    this.currentProject._user,
+                    this.currentProject.__v,
+                    this.currentProject.updatedAt,
+                    this.currentProject.createAt,
+                    this.currentProject.tasks,
+                    this.currentProject.slug
+                )
+            )
+        );
         this.currentProject = null;
         this.projectForm = this.fb.group({
             name: ['', Validators.required]
         });
     }
 
-    deleteTaskModel(task, content) {
+    deleteTaskModel(task: Task, project: Project, content) {
         this.currentTask = task;
+        this.currentTask._project = project._id;
         this.dltTask = true;
         this.dltProject = false;
         this.modalService.open(content).result.then(
@@ -162,10 +171,20 @@ export class DashboardComponent {
         );
     }
 
-    // Delete Task //pass task
     deleteTask() {
-        const task = this.currentTask;
-        this.store.dispatch(new projectActions.DeleteTask(task));
+        this.store.dispatch(
+            new projectActions.DeleteTask(
+                new Task(
+                    this.currentTask.name,
+                    this.currentTask.description,
+                    this.currentTask._project,
+                    this.currentTask._id,
+                    this.currentTask.updatedAt,
+                    this.currentTask.createAt,
+                    this.currentTask.complete
+                )
+            )
+        );
         this.currentTask = null;
     }
 
@@ -185,17 +204,26 @@ export class DashboardComponent {
         );
     }
 
-    // Delete Project //pass project
     deleteProject() {
-        const project = this.currentProject;
-        this.store.dispatch(new projectActions.DeleteProject(project));
+        this.store.dispatch(new projectActions.DeleteProject(this.currentProject));
         this.currentProject = null;
     }
 
     taskCompleteChanged(tsk: Task, projectId: string) {
-        tsk._project = projectId;
         tsk.complete = tsk.complete ? false : true;
-        this.store.dispatch(new projectActions.UpdateTask(tsk));
+        this.store.dispatch(
+            new projectActions.UpdateTask(
+                new Task(
+                    tsk.name,
+                    tsk.description,
+                    projectId,
+                    tsk._id,
+                    tsk.updatedAt,
+                    tsk.createAt,
+                    tsk.complete
+                )
+            )
+        );
     }
 
     isNameNotEmpty() {

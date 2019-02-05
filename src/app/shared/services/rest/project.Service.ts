@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import * as Constants from '../app.constant';
 import { Project } from '../../models/project.model';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
+import { Status } from '../../../login/models/status-type.enum';
 
 @NgModule({})
 export class ProjectService {
@@ -37,12 +38,15 @@ export class ProjectService {
         });
     }
 
-    public deleteProject(project): Observable<any> {
+    public deleteProject(project): Observable<{ statusCode: number; status: Status.OK }> {
         const token: string = localStorage.getItem('token');
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-        return this.http.delete(`${Constants.URL}/project/${project._id}`, {
-            headers: headers
-        });
+        return this.http.delete<{ statusCode: number; status: Status.OK }>(
+            `${Constants.URL}/project/${project._id}`,
+            {
+                headers: headers
+            }
+        );
     }
 }

@@ -9,6 +9,7 @@ import 'rxjs/add/operator/delay';
 
 import * as projectActions from '../actions/project.actions';
 import { Project } from '../shared/models/project.model';
+import { of } from 'rxjs/observable/of';
 export type Action = projectActions.All;
 
 @Injectable()
@@ -47,6 +48,8 @@ export class ProjectEffects {
     deleteTask: Observable<Action> = this.actions
         .ofType(projectActions.DELETE_PROJECT)
         .map((action: projectActions.DeleteProject) => action.payload)
-        .switchMap((payload: Project) => this.projectService.deleteProject(payload))
-        .map(res => new projectActions.GetProjectList());
+        .switchMap((payload: Project) =>
+            this.projectService.deleteProject(payload).merge(of(payload))
+        )
+        .map(res => new projectActions.DeleteProjectSuccess(res));
 }

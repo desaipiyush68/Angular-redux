@@ -37,6 +37,6 @@ export class TaskEffects {
     deleteTask: Observable<Actionproject> = this.actions
         .ofType(projectActions.DELETE_TASK)
         .map((action: projectActions.DeleteTask) => action.payload)
-        .switchMap(payload => this.taskService.deleteTask(payload))
-        .map(res => new projectActions.GetProjectList(res));
+        .switchMap((payload: Task) => this.taskService.deleteTask(payload).merge(of(payload)))
+        .map(res => new projectActions.DeleteTaskSuccess(res));
 }

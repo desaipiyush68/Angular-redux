@@ -6,6 +6,7 @@ import * as Constants from '../app.constant';
 
 import { Task } from '../../models/task.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Status } from '../../../login/models/status-type.enum';
 
 @NgModule({})
 export class TaskService {
@@ -38,11 +39,14 @@ export class TaskService {
         return this.http.put<Task>(`${Constants.URL}/task`, body, { headers: headers });
     }
 
-    public deleteTask(task): Observable<any> {
+    public deleteTask(task): Observable<{ statusCode: number; status: Status.OK }> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-        return this.http.delete(`${Constants.URL}/task${task._project}/${task._id}`, {
-            headers: headers
-        });
+        return this.http.delete<{ statusCode: number; status: Status.OK }>(
+            `${Constants.URL}/task/${task._project}/${task._id}`,
+            {
+                headers: headers
+            }
+        );
     }
 }
