@@ -25,7 +25,6 @@ import { ProjectEffects } from './effects/project.effects';
 import { TaskEffects } from './effects/task.effects';
 import { UserReducer } from './reducers/users.reducers';
 import { ProjectReducer } from './reducers/project.reducers';
-import { TaskReducer } from './reducers/task.reducers';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: Http) {
@@ -53,8 +52,7 @@ export function HttpLoaderFactory(http: Http) {
         }),
         StoreModule.forRoot({
             user: UserReducer,
-            project: ProjectReducer,
-            task: TaskReducer
+            project: ProjectReducer
         }),
         StoreDevtoolsModule.instrument({
             maxAge: 10
