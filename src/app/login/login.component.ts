@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { TranslateService } from '@ngx-translate/core';
 // ngrx
@@ -7,6 +7,8 @@ import * as usersActions from '../actions/users.actions';
 // store
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/store';
+import { LoginResponse } from './models/login-response.models';
+import { Status } from './models/status-type.enum';
 
 @Component({
     selector: 'app-login',
@@ -16,7 +18,7 @@ import { AppState } from '../store/store';
 })
 export class LoginComponent {
     email: any;
-    password: any;
+    password = null;
     user$: any;
     error: boolean;
     constructor(
@@ -26,29 +28,23 @@ export class LoginComponent {
     ) {
         this.user$ = this.store.select('user');
         this.error = false;
+        this.translate.use('es');
     }
 
     public onLoggedin() {
-        this.translate.use('es');
-
-        if (this.password === undefined) {
-            this.password = null;
-        }
-
         this.store.dispatch(new usersActions.Login({ email: this.email, password: this.password }));
 
         this.user$.subscribe(
-            data => {
-                if (data.success) {
+            (response: LoginResponse): void => {
+                if (response.status === Status.OK) {
                     this.error = false;
-                    const token = data.token;
-                    localStorage.setItem('token', token);
+                    localStorage.setItem('token', response.token);
                     if (localStorage.getItem('token')) {
                         this.router.navigate(['/dashboard']);
                     }
                 }
             },
-            error => {
+            (error): void => {
                 this.error = true;
             }
         );
