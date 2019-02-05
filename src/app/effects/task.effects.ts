@@ -8,9 +8,6 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 
-import * as taskActions from '../actions/task.actions';
-export type Actiontask = taskActions.All;
-
 import * as projectActions from '../actions/project.actions';
 import { Task } from '../shared/models/task.model';
 export type Actionproject = projectActions.All;
@@ -22,34 +19,24 @@ export class TaskEffects {
     // tslint:disable-next-line:member-ordering
     @Effect()
     createTask: Observable<Actionproject> = this.actions
-        .ofType(taskActions.CREAT_TASK)
-        .map((action: taskActions.CreateTask) => action.payload)
-        .switchMap(payload =>
-            this.taskService.createTask(payload.name, payload.description, payload._project)
-        )
-        .map(res => new projectActions.GetProjectList());
+        .ofType(projectActions.CREAT_TASK)
+        .map((action: projectActions.CreateTask) => action.payload)
+        .switchMap((payload: Task) => this.taskService.createTask(payload))
+        .map(res => new projectActions.CreateTaskSuccess(res));
 
     // tslint:disable-next-line:member-ordering
     @Effect()
-    getTaskList: Observable<Actiontask> = this.actions
-        .ofType(taskActions.GET_TASK_LIST)
-        .map((action: taskActions.GetTaskList) => action.payload)
-        .switchMap(payload => this.taskService.getTasks(payload.pid))
-        .map(res => new taskActions.GetTaskListSuccess(res));
-
-    // tslint:disable-next-line:member-ordering
-    @Effect()
-    updateTask: Observable<Actiontask> = this.actions
-        .ofType(taskActions.UPDATE_TASK)
-        .map((action: taskActions.UpdateTask) => action.payload)
+    updateTask: Observable<Actionproject> = this.actions
+        .ofType(projectActions.UPDATE_TASK)
+        .map((action: projectActions.UpdateTask) => action.payload)
         .switchMap((payload: Task) => this.taskService.updateTask(payload))
-        .map(res => new taskActions.UpdateTaskSuccess(res));
+        .map((res: Task) => new projectActions.UpdateTaskSuccess(res));
 
     // tslint:disable-next-line:member-ordering
     @Effect()
     deleteTask: Observable<Actionproject> = this.actions
-        .ofType(taskActions.DELETE_TASK)
-        .map((action: taskActions.DeleteTask) => action.payload)
+        .ofType(projectActions.DELETE_TASK)
+        .map((action: projectActions.DeleteTask) => action.payload)
         .switchMap(payload => this.taskService.deleteTask(payload))
         .map(res => new projectActions.GetProjectList(res));
 }

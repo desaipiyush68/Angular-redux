@@ -8,6 +8,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 
 import * as projectActions from '../actions/project.actions';
+import { Project } from '../shared/models/project.model';
 export type Action = projectActions.All;
 
 @Injectable()
@@ -22,8 +23,8 @@ export class ProjectEffects {
     createProject: Observable<Action> = this.actions
         .ofType(projectActions.CREAT_PROJECT)
         .map((action: projectActions.CreateProject) => action.payload)
-        .switchMap(payload => this.projectService.createProject(payload.name))
-        .map(res => new projectActions.GetProjectListSuccess(res));
+        .switchMap((payload: Project) => this.projectService.createProject(payload.name))
+        .map((res: Project) => new projectActions.CreateProjectSuccess(res));
 
     // tslint:disable-next-line:member-ordering
     @Effect()
@@ -38,7 +39,7 @@ export class ProjectEffects {
     UpdateProject: Observable<Action> = this.actions
         .ofType(projectActions.UPDATE_PROJECT)
         .map((action: projectActions.UpdateProject) => action.payload)
-        .switchMap(payload => this.projectService.updateProject(payload))
+        .switchMap((payload: Project) => this.projectService.updateProject(payload))
         .map(res => new projectActions.UpdateProjectSuccess(res));
 
     // tslint:disable-next-line:member-ordering
@@ -46,6 +47,6 @@ export class ProjectEffects {
     deleteTask: Observable<Action> = this.actions
         .ofType(projectActions.DELETE_PROJECT)
         .map((action: projectActions.DeleteProject) => action.payload)
-        .switchMap(payload => this.projectService.deleteProject(payload))
-        .map(res => new projectActions.GetProjectList(res));
+        .switchMap((payload: Project) => this.projectService.deleteProject(payload))
+        .map(res => new projectActions.GetProjectList());
 }

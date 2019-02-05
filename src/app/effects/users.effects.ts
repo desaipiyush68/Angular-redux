@@ -9,6 +9,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 import * as userActions from '../actions/users.actions';
+import { LoginResponse } from '../login/models/login-response.models';
 export type Action = userActions.All;
 
 @Injectable()
@@ -35,7 +36,7 @@ export class UserEffects {
         .ofType(userActions.LOGIN_REQUESTED)
         .map((action: userActions.Login) => action.payload)
         .switchMap(payload => this.userService.login(payload.email, payload.password))
-        .map(res => new userActions.LoginSuccess(res));
+        .map((res: LoginResponse) => new userActions.LoginSuccess(res));
 
     // tslint:disable-next-line:member-ordering
     @Effect()
